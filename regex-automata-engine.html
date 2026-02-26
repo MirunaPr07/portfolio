@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regex Automata Engine</title>
+  <meta name="description" content="regex to NFA and NFA to DFA">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Regex Automata Engine</h1>
+          <p class="brand__subtitle">
+            Regular expressions implemented through NFA/DFA constructions in Python.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="https://ocw.cs.pub.ro/ppcarte/doku.php?id=lfa:2025:proiect:etapa1" target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/regex_automata_engine.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project represents a regex-to-automata implementation in Python. The main idea is building an NFA
+        from a regular expression using Thompson's algorithm and then transforming that NFA into a DFA using
+        subset construction.
+      </p>
+
+      <p class="card__desc">
+        I kept everything explicit: states and transitions are stored in sets and dictionaries, epsilon transitions
+        are handled with closures, and the DFA states are represented as frozensets of NFA states.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">Python</span>
+        <span class="tag tag--mint">Automata</span>
+        <span class="tag tag--peach">Regex</span>
+        <span class="tag tag--pink">NFA -> DFA</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Main components</h3>
+        <ul>
+          <li><strong>Regex representation</strong> - regex elements as classes (character, epsilon, operators).</li>
+          <li><strong>Thompson construction</strong> - builds an NFA with epsilon transitions.</li>
+          <li><strong>Epsilon-closure</strong> - expands reachable states through "epsilon edges".</li>
+          <li><strong>Subset construction</strong> - converts NFA to DFA with frozenset states.</li>
+          <li><strong>Transition tables</strong> - stored directly in dictionaries.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Key concepts used</h3>
+        <ul>
+          <li>Graph traversal style logic (queue-based BFS) for epsilon-closure.</li>
+          <li>Determinization using sets of states.</li>
+          <li>Clear data structures: sets for states, dictionaries for transitions.</li>
+          <li>Keeping epsilon as a dedicated symbol in transitions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: epsilon-closure</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This is the part where I create the epsilon-closure of a state.
+        I use a queue and expand through epsilon transitions until nothing new is found.
+      </p>
+
+<pre><code class="language-python">def epsilon_closure(self, state: STATE) -&gt; set[STATE]:
+    set_final = set()
+    queue = [] # coada simulata cu o lista, in care mereu adug cu append si scot cu pop(0)
+    queue.append(state)
+    while len(queue) != 0:
+        crt = queue.pop(0)
+        set_final.add(crt)
+        if (crt, EPSILON) in self.d:
+            for st in self.d[(crt, EPSILON)]: # verific ca starea sa nu fie nici deja proc nici in parcurs de proc
+                if st not in set_final and st not in queue: # sa nu adaug de 2 ori aceeasi stare in coada!!
+                    queue.append(st)
+    return set_final</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          I treat epsilon transitions like "free moves". Starting from one state, I keep pushing new states into a queue
+          while I can still follow epsilon edges. In the end, the closure is the set of all states that are reachable in that way.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

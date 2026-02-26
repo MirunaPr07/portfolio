@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turing Machine</title>
+  <meta name="description" content="Turing Machine for a 4x4 Skyscrapers format">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Turing Machine: Skyscrapers Validator</h1>
+          <p class="brand__subtitle">
+            A formal Turing Machine that validates a 4x4 Skyscrapers puzzle.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="archive/enunt_tema1_aa.zip" download>Statement</a>
+        <a class="btn" href="archive/turing_machine_skyscrapers.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project consists of a Turing Machine that validates a 4x4 Skyscrapers puzzle.
+        The input contains both the grid and the visibility constraints, using
+        digits and special symbols (<code>1-4, :, #</code>).
+      </p>
+
+      <p class="card__desc">
+        Instead of building one large machine from the start, I created separate Turing Machines
+        for each validation, then combined them into a final version including all validations.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">Turing Machine</span>
+        <span class="tag tag--mint">Formal Languages</span>
+        <span class="tag tag--pink">Theoretical CS</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What I implemented</h3>
+        <ul>
+          <li>Row uniqueness validator.</li>
+          <li>Column uniqueness validator.</li>
+          <li>Visibility constraints validator.</li>
+          <li>Final machine integrating all constraints.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation approach</h3>
+        <ul>
+          <li>Each rule was encoded as a separate state machine.</li>
+          <li>Transitions are defined explicitly in the <code>.tms</code> files.</li>
+          <li>The final machine implements all validations.</li>
+          <li>Acceptance state: <code>Y</code>; rejection state: <code>N</code>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative snippet</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        Each transition is described by the current state and read symbol,
+        followed by the next state, the symbol to write, and the direction.
+      </p>
+
+<pre><code>init : q0
+accept : Y
+
+q0, 1
+q1, 1, >
+
+q1, 2
+q2, 2, >
+
+q7, #
+Y, #, -
+</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          The machine reads a symbol, transitions to a new state,
+          optionally overwrites the symbol, and moves left, right,
+          or stays in place. The computation ends in either an accept (Y)
+          or reject (N) state.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

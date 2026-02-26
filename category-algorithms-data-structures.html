@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Algorithms & Data Structures</title>
+  <meta name="description" content="Algorithms and data structures projects">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Algorithms & Data Structures</h1>
+          <p class="brand__subtitle">
+            Graphs, trees, DP and classic algorithmic problem solving.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back</a>
+      </nav>
+    </header>
+
+    <section id="projects" class="grid" style="margin-top:18px">
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Suffix Tree & Radix Compression</h3>
+        <div class="card__meta">Tree Structures • String Processing</div>
+
+        <p class="card__desc">
+          Built a suffix tree for a string and extended it with radix compression
+          to reduce chains of single-child nodes and improve lookup efficiency.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C</span>
+          <span class="tag">Suffix Tree</span>
+          <span class="tag">Radix</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="suffix-tree-radix.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/suffix_tree_radix.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Graphs: Shortest Paths</h3>
+        <div class="card__meta">Graphs • Dijkstra</div>
+
+        <p class="card__desc">
+          Two graph problems in one program: a route wear simulation per multiple years and a shortest-paths solution
+          based on Dijkstra, both implemented using adjacency lists.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C</span>
+          <span class="tag">Graphs</span>
+          <span class="tag">Adjacency List</span>
+          <span class="tag">Dijkstra</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="graph-wear-dijkstra.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/graph_wear_dijkstra.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Dynamic Programming + Divide Et Impera</h3>
+        <div class="card__meta">DP • DEI • Graph Search</div>
+
+        <p class="card__desc">
+          Four independent algorithmic problems solved in C++: a recursive Divide & Conquer "Walsh" problem, a DP problem in 2D, DP applied on strings with '?' characters
+           and a BFS + knapsack style DP optimization.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C++</span>
+          <span class="tag">DP</span>
+          <span class="tag">DEI</span>
+          <span class="tag">BFS</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="cpp-dp-divide-conquer.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/cpp_dp_divide_conquer_set.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Graph Reconstruction + Max Area</h3>
+        <div class="card__meta">BFS • Graphs • Grid Search</div>
+
+        <p class="card__desc">
+          Two problems based on BFS: rebuilding a graph knowing the distances between each node and node 1 (layer-by-layer)
+          and finding the largest connected area in a grid while restricting exploration to a given value range.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C++</span>
+          <span class="tag">BFS</span>
+          <span class="tag">Graphs</span>
+          <span class="tag">Grids</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="cpp-graph-reconstruction-bfs.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/cpp_graph_reconstruction_bfs_area.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Pairing Heap + Streaming Median in Racket</h3>
+        <div class="card__meta">Heaps • Streams • Median</div>
+
+        <p class="card__desc">
+          A small program built around pairing heaps: generic merge with comparators, top-k extraction and
+          a streaming median calculated dynamically using two heaps.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">Racket</span>
+          <span class="tag">Pairing Heap</span>
+          <span class="tag">Streams</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="racket-pairing-heap-stream-median.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/racket_pairing_heap_stream_median.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+	  
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Train Simulator (Double Linked List)</h3>
+        <div class="card__meta">Data Structures • Double Linked List • Command Queue</div>
+
+        <p class="card__desc">
+          A small command-driven simulator built around a circular double-linked list.
+          Each wagon is a node, and the "mechanic" moves, inserts, deletes, and edits wagons.
+          Commands are queued and executed in order.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C</span>
+          <span class="tag">Linked List</span>
+          <span class="tag">Pointers</span>
+          <span class="tag">Queue</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="train-simulator.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/train_simulator_linked_list.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

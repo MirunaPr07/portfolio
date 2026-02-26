@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Suffix Tree & Radix Compression</title>
+  <meta name="description" content="Suffix tree construction and radix compression">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Suffix Tree & Radix Compression</h1>
+          <p class="brand__subtitle">
+            Suffix tree construction and radix compression.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost"
+           href="https://archive.curs.upb.ro/2023/pluginfile.php/310566/mod_assign/intro/SDA___Tema2_2024.pdf"
+           target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/suffix_tree_radix.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        In this project, I built a suffix tree for a given string (with a '$' terminator),
+        inserting all suffixes one by one. The tree supports substring queries by traversing
+        character by character from the root.
+        In the final part, I implemented a radix compression that merges chains of
+        single-child nodes into one edge labeled with a substring.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--mint">Trees</span>
+        <span class="tag tag--peach">Strings</span>
+        <span class="tag tag--pink">Radix Compression</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What I implemented</h3>
+        <ul>
+          <li>Generated all suffixes of the input string.</li>
+          <li>Inserted suffixes into a tree structure with dynamic children arrays.</li>
+          <li>Supported substring existence queries by traversing edges.</li>
+          <li>Compressed single-child chains into radix edges.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>Each node stores its level, character, number of children and children vector.</li>
+          <li>Memory is allocated dynamically for nodes and child arrays.</li>
+          <li>Compression reduces memory usage and traversal depth.</li>
+          <li>Queries run by descending the tree character by character.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: substring search</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        The following function checks whether a substring exists in the tree
+        by descending from the root and matching characters on edges.
+      </p>
+
+      <pre><code class="language-c">int cauta(const char *p, Tree root) {
+    const char *q = p;
+    Tree cur = root;
+
+    while (*q && cur) {
+        int gasit = 0;
+        for (int i = 0; i < cur->nr_copii; i++) {
+            Tree nxt = cur->children[i];
+            if (nxt->caracter == *q) {
+                cur = nxt;
+                q++;
+                gasit = 1;
+                break;
+            }
+        }
+        if (!gasit) return 0;
+    }
+    return 1;
+}</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          The search starts from the root and follows matching edges.
+          If at some point no child matches the next character, then the substring does not exist.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

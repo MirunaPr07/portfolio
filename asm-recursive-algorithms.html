@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assembly: Recursive Algorithms</title>
+  <meta name="description" content="x86/x64 assembly problems">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Assembly: Recursive Algorithms</h1>
+          <p class="brand__subtitle">
+            Parentheses validation + recursive QuickSort and Binary Search in x86, plus a small 64-bit map/reduce bonus.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="https://gitlab.cs.pub.ro/iocla/tema3-2024" target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/asm_recursive_algorithms.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project is a collection of assembly implementations for a few well known problems.
+        I wrote a parentheses validator, then moved to recursive algorithms (QuickSort and Binary Search), 
+        where the main challenge was handling recursion correctly without C help.
+        There is also a small 64-bit bonus where I implemented map and reduce over arrays.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">ASM (x86)</span>
+        <span class="tag tag--mint">Recursion</span>
+        <span class="tag tag--peach">Stack frames</span>
+        <span class="tag tag--pink">x64 bonus</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What I implemented</h3>
+        <ul>
+          <li>Parentheses validation (detects incorrect or mismatched parantheses).</li>
+          <li>Recursive QuickSort over an int array.</li>
+          <li>Recursive Binary Search over a sorted array.</li>
+          <li>Bonus (64-bit): map and reduce applied over arrays.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>The recursive parts were the main challenge: stack usage, parameters, and returning correctly.</li>
+          <li>I worked directly with element addresses (indexing into arrays manually).</li>
+          <li>It helped me connect high-level algorithms with what actually happens at register/stack level.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: recursive QuickSort</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This is the recursive QuickSort implementation from my solution. It receives the buffer address
+        and the left/right indices, partitions around the pivot, then calls itself on the resulting segments.
+      </p>
+
+      <pre><code class="language-nasm">quick_sort:
+    ;; create the new stack frame
+    enter 0, 0
+
+    ;; save the preserved registers
+    mov eax, DWORD [ebp + 8]
+    ; mi am retinut in eax vectorul
+    ; doisprezece
+    mov esi, DWORD [ebp + 12]
+    ; saisprezece
+    mov edi, DWORD [ebp + 16]
+    ;; recursive qsort implementation goes here
+    cmp esi, edi
+    jg final
+    cmp esi, edi
+    je final
+    mov ecx, esi
+    ; in edi am pivotul, care e indexul ultimului elem.
+    dec ecx
+    repetitiva:
+    ; nr de octeti
+    mov edx, DWORD [eax + 4 * esi]
+    ; patru octeti
+    cmp edx, DWORD [eax + 4 * edi]
+    jg continua
+    ; daca elementul curent e mai mare decat cel de la pivot, doar cresc indexul curent
+    ; aici ajunge dc e mai mic elem curent decat cel de la pivot
+    inc ecx
+    push edi
+    ; pun in edx val de la indexul ecx
+    mov edx, DWORD [eax + 4 * ecx]
+    ; patru
+    mov edi, DWORD [eax + 4 * esi]
+    ; patru
+    mov DWORD [eax + 4 * ecx], edi
+    ; patru
+    mov DWORD [eax + 4 * esi], edx
+    ; primul element din stiva
+    mov edi, DWORD [ebp + 8]
+    pop edi
+
+    continua:
+    inc esi
+    cmp esi, edi
+    je divide
+    jmp repetitiva
+    divide:
+    inc ecx
+    ; patru
+    mov edx, DWORD [eax + 4 * ecx]
+    ; patru
+    mov edi, DWORD [eax + 4 * esi]
+    ; patru
+    mov DWORD [eax + 4 * ecx], edi
+    ; patru
+    mov DWORD [eax + 4 * esi], edx
+
+    dec ecx
+    ; doisprezece
+    mov esi, DWORD [ebp + 12]
+    push ecx
+    push esi
+    push eax
+    call quick_sort
+    ; duoi
+    add ecx, 2
+    ; saisprezece
+    mov esi, DWORD [ebp + 16]
+    push esi
+    push ecx
+    push eax
+    call quick_sort
+    ;; restore the preserved registers
+    final:
+    leave
+    ret</code></pre>
+    </section>
+
+    <section class="card section">
+      <h3>Notes</h3>
+      <p class="card__desc" style="margin-top:0">
+        The project is split into separate files for each task (paranthesinator, quick sort, binary search)
+        plus the 64-bit bonus. The assembly files are meant to be assembled and linked.
+      </p>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

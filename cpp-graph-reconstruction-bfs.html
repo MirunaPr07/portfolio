@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graph Reconstruction & Max Area</title>
+  <meta name="description" content="solutions using BFS">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Graph Reconstruction & Maximal Area</h1>
+          <p class="brand__subtitle">
+            Two independent C++ problems built around BFS: graph layers + grid components with constraints for range.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="archive/enunt_tema2_pa.zip" download>Statement</a>
+        <a class="btn" href="archive/cpp_graph_reconstruction_bfs_area.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project contains two independent C++ solutions.
+        The first one builds an undirected graph using only the distances to node 1,
+        by connecting nodes between consecutive BFS layers and then validating the result with a BFS check.
+      </p>
+
+      <p class="card__desc">
+        The second one searches a grid for the largest connected component, but it only takes into consideration cells with values inside
+        a given range <code>[min_val, max_val]</code>. For each required interval, I run BFS and track the largest area.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C++</span>
+        <span class="tag tag--mint">BFS</span>
+        <span class="tag tag--peach">Graph Layers</span>
+        <span class="tag tag--pink">Grid Components</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What is included</h3>
+        <ul>
+          <li><strong>p1.cpp</strong> - Graph reconstruction from distances + BFS validation.</li>
+          <li><strong>p2.cpp</strong> - Maximum area in a grid, using BFS restricted to <code>[min_val, max_val]</code>.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>For the graph problem, edges are built only between nodes with distance difference equal to 1, then checked with BFS.</li>
+          <li>For the grid problem, I expand in 4 directions and ignore cells outside the current value interval.</li>
+          <li>I kept the logic simple: a BFS function that returns the area of one component, then a max over all starts.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: BFS on grid with value range</h3>
+      <p class="card__desc" style="margin-top:0">
+        This is the BFS I used to calculate the area of a connected component, while only expanding through cells that stay
+        inside the current <code>[min_val, max_val]</code> window.
+      </p>
+
+<pre><code class="language-cpp">int bfs(int i, int j, vector&lt;vector&lt;int&gt;&gt;&amp; matrice,
+        vector&lt;vector&lt;bool&gt;&gt;&amp; vizitat, int n, int m,
+        int min_val, int max_val) {
+    queue&lt;pair&lt;int, int&gt;&gt; coada;
+    coada.push({i, j});
+    vizitat[i][j] = true;
+    int arie = 1;  // incepe cu 1 ca am pornit dintr o celula valida
+    while (coada.empty() == NULL) {
+        pair&lt;int, int&gt; current;
+        current = coada.front();
+        coada.pop();
+        int x, y;
+        x = current.first;
+        y = current.second;
+        for (int k = 0; k &lt;= 3; k++) {
+            int nx, ny;
+            nx = x + dx[k];
+            ny = y + dy[k];
+            // verific daca vecinul e in matrice si in interval
+            if (nx &gt;= 0 &amp;&amp; nx &lt; n &amp;&amp; ny &gt;= 0 &amp;&amp;
+                ny &lt; m &amp;&amp; vizitat[nx][ny] == 0) {
+                if (matrice[nx][ny] &gt;= min_val &amp;&amp; matrice[nx][ny] &lt;=
+                    max_val) {
+                    vizitat[nx][ny] = true;
+                    coada.push({nx, ny});
+                    arie++;
+                }
+            }
+        }
+    }
+    return arie;
+}</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          I mark visited cells, expand in 4 directions, and only push neighbors that are inside the matrix and inside
+          the current value range. The function returns the area of the component starting from the given cell.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

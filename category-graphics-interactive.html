@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graphics & Interactive</title>
+  <meta name="description" content="OpenGL projects">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Graphics & Interactive</h1>
+          <p class="brand__subtitle">
+            OpenGL projects (2D and 3D) with collisions and simple gameplay logic.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back</a>
+      </nav>
+    </header>
+
+    <section id="projects" class="grid" style="margin-top:18px">
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Arcade Machine: Ship Builder & Breakout Game</h3>
+        <div class="card__meta">OpenGL • 2D Transformations • Collisions</div>
+
+        <p class="card__desc">
+          A 2D OpenGL project with two parts: a ship editor (build your own ship from blocks)
+          and a Breakout game that uses the ship you designed. It includes mouse-based editing,
+          brick collisions, ball physics and simple constraints checks.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C++</span>
+          <span class="tag">OpenGL</span>
+          <span class="tag">2D</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="arcade-machine-ship-editor.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/egc_arcade_machine.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Train Geeks with Cargo Delivery</h3>
+        <div class="card__meta">OpenGL • 3D Scene • Collisions with AABB</div>
+
+        <p class="card__desc">
+          A small 3D OpenGL project where a train moves autonomously on a rail network.
+          The map includes terrain tiles of different types, multiple stations, different rail types (normal/bridge/tunnel)
+          and a simple delivery loop based on collecting resources and completing an order before the time ends.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C++</span>
+          <span class="tag">OpenGL</span>
+          <span class="tag">3D</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="train-geeks-cargo-delivery.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/egc_train_geeks.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

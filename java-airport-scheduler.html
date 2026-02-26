@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java Airport Scheduler</title>
+  <meta name="description" content="Runway scheduling">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Java Airport Scheduler</h1>
+          <p class="brand__subtitle">
+            Runway allocation + urgent priority queues + occupancy rules based on time.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="archive/enunt_tema2_poo.zip" download>Statement</a>
+        <a class="btn" href="archive/java_airport_scheduler.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project simulates airport runway management. Flights are queued for takeoff or landing,
+        with a separate urgent queue that always has priority.
+        Each runway has rules that determine if it is available, based on the last maneuver and elapsed time.
+      </p>
+
+      <p class="card__desc">
+        I kept the logic modular: aircraft types, runway behavior, command parsing and validations are separated,
+        and invalid operations are handled through exceptions.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">Java</span>
+        <span class="tag tag--mint">OOP & Inheritance</span>
+        <span class="tag tag--peach">Generics</span>
+        <span class="tag tag--pink">Queues & Scheduling</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Key features</h3>
+        <ul>
+          <li>Runways are categorized by activity: <strong>TAKEOFF</strong> or <strong>LANDING</strong>.</li>
+          <li>There are two queues per runway: <strong>urgent</strong> and <strong>normal</strong>.</li>
+          <li>Sorting by time/priority (via <code>Comparable</code> and collections).</li>
+          <li>Time of occupancy: runways stay occupied after a maneuver (based on elapsed minutes).</li>
+          <li>Commands for allocation, urgent handling, runway status and flight details.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>Used <code>LocalTime</code>, <code>DateTimeFormatter</code>, and <code>Duration</code> for time logic.</li>
+          <li>Custom exceptions for wrong runway selection and for unavailable runway.</li>
+          <li>Runway logic is centralized, while input handling stays in the main command flow.</li>
+          <li>Priority logic is consistent: urgent queue first, then normal queue.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: the function that handles permission for maneuver</h3>
+      <p class="card__desc" style="margin-top:0">
+        The logic below checks if a runway is still occupied based on the last timestamp.
+        If it is available, it promotes the first eligible aircraft(urgent first), updates status
+        and stores the real timestamp of the maneuver.
+      </p>
+
+<pre><code class="language-java">public static void manevra (List&lt;Runway&lt;WideBodyAirplane&gt;&gt; wide_runways, List&lt;Runway&lt;NarrowBodyAirplane&gt;&gt; narrow_runways, String ID_caut, LocalTime timestamp) throws UnavailableRunwayException {
+    // nu stiu tipul pistei, tb sa caut in ambele
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    for (Runway&lt;WideBodyAirplane&gt; runway : wide_runways)
+        if (runway.getID().equals(ID_caut)) {
+            Duration dif = Duration.between(runway.getUltim(), timestamp);
+            if ((runway.getAvioane().get(0).getStatus() == Status.WAITING_FOR_TAKEOFF || runway.getAvioane().get(0).getStatus() == Status.DEPARTED) && dif.toMinutes() &lt;= 5)
+                throw new UnavailableRunwayException(timestamp.format(formatter) + " | The chosen runway for maneuver is currently occupied");
+            else if ((runway.getAvioane().get(0).getStatus() == Status.WAITING_FOR_LANDING || runway.getAvioane().get(0).getStatus() == Status.LANDED) && dif.toMinutes() &lt;= 10)
+                throw new UnavailableRunwayException(timestamp.format(formatter) + " | The chosen runway for maneuver is currently occupied");
+            for (WideBodyAirplane airplane : runway.getUrgente()) {
+                if (airplane.getStatus() == Status.WAITING_FOR_TAKEOFF) {
+                    airplane.setStatus(Status.DEPARTED);
+                    airplane.setTimp_real(timestamp);
+                    runway.setUltim(timestamp);
+                    return;
+                }
+                else if (airplane.getStatus() == Status.WAITING_FOR_LANDING) {
+                    airplane.setStatus(Status.LANDED);
+                    airplane.setTimp_real(timestamp);
+                    runway.setUltim(timestamp);
+                    return;
+                }
+            }
+            for (WideBodyAirplane airplane : runway.getAvioane()) {
+                if (airplane.getStatus() == Status.WAITING_FOR_TAKEOFF) {
+                    airplane.setStatus(Status.DEPARTED);
+                    airplane.setTimp_real(timestamp);
+                    runway.setUltim(timestamp);
+                    return;
+                }
+                else if (airplane.getStatus() == Status.WAITING_FOR_LANDING) {
+                    airplane.setStatus(Status.LANDED);
+                    airplane.setTimp_real(timestamp);
+                    runway.setUltim(timestamp);
+                    return;
+                }
+            }
+        }
+}</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          I search the runway by ID(wide first, then narrow), check occupancy using the last timestamp and a time window,
+          then pick the first eligible airplane (urgent queue first). After the maneuver, status and timestamps are updated.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

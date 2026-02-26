@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voting System</title>
+  <meta name="description" content="Voting system in Java">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Java Voting System</h1>
+          <p class="brand__subtitle">
+            Object-oriented election system built in Java.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="archive/enunt_tema1_poo.zip" download>Statement</a>
+        <a class="btn" href="archive/java_voting_system.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project simulates a complete election session using object-oriented concepts.
+        It includes creating election sessions, registering voters and candidates,
+        processing votes, detecting invalid situations, and generating reports in the end.
+      </p>
+
+      <p class="card__desc">
+        The project is structured into clearly separated modules,
+        each responsible for a specific part.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">Java</span>
+        <span class="tag tag--mint">OOP</span>
+        <span class="tag tag--peach">Collections</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Main components</h3>
+        <ul>
+          <li><strong>Election Management</strong> - it initializes election sessions and IDs.</li>
+          <li><strong>Voters/Candidates/Districts</strong> - manages entities and lookups.</li>
+          <li><strong>Voting Module</strong> - validates and records votes.</li>
+          <li><strong>Fraud Checks</strong> - detects invalid or duplicate voting.</li>
+          <li><strong>Reports</strong> - generates statistics per region and candidate.</li>
+          <li><strong>App</strong> - processes commands and handles user messages.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Key concepts used</h3>
+        <ul>
+          <li>Separation of responsibilities(modular OOP design).</li>
+          <li>Java Collections (eg. ArrayList).</li>
+          <li>Lookups by ID and name.</li>
+          <li>Validation and error handling.</li>
+          <li>Formatted text output for reports.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: regional percentage report</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This method counts total votes per region and converts the results
+        into percentage format for each candidate.
+      </p>
+
+<pre><code class="language-java">
+public class Rapoarte {
+    public String procentePeRegiune(String idAlegeri,
+                                    ArrayList<Votanti> toateVotarile,
+                                    ArrayList<Candidati> totiCandidatii) {
+        if (idAlegeri == null || idAlegeri.isEmpty()) return "EROARE: Nu exista alegeri cu acest id\n";
+
+        // total voturi pe regiune
+        Map<String, Integer> totalPeReg = new HashMap<>();
+        // voturi per candidat in regiune
+        Map<String, Map<String, Integer>> voturi = new HashMap<>();
+
+        for (Votanti v : toateVotarile) {
+            if (!idAlegeri.equals(v.getId_alegeri())) continue;
+            for (Votanti x : v.getDate_votanti()) {
+                for (String regiune : x.getNume_circumscriptii()) {
+                    totalPeReg.put(regiune, totalPeReg.getOrDefault(regiune, 0) + 1);
+                    // alocare map intern per candidat
+                    voturi.putIfAbsent(regiune, new HashMap<>());
+                    // incrementez candidatul votat in acea regiune
+                    String c = x.getVot(); // ex: nume candidat / cod
+                    voturi.get(regiune).put(c, voturi.get(regiune).getOrDefault(c, 0) + 1);
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (String regiune : voturi.keySet()) {
+            int total = totalPeReg.getOrDefault(regiune, 0);
+            int idx = 1;
+            for (Map.Entry<String, Integer> e : voturi.get(regiune).entrySet()) {
+                int cnt = e.getValue();
+                int procent = total == 0 ? 0 : (cnt * 100 / total);
+                sb.append(idx++).append(". In regiunea ").append(regiune)
+                  .append(", candidatul ").append(e.getKey())
+                  .append(" a obtinut ").append(cnt).append(" voturi (")
+                  .append(procent).append("%)").append("\n");
+            }
+        }
+        return sb.toString();
+    }
+}
+</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          Validation is performed before calculations
+          and results are formatted in a user-readable structure after being transformed in percentage format.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

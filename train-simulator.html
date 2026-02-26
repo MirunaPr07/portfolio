@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Train Simulated by Double Linked List</title>
+  <meta name="description" content="circular double linked list train simulator">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Train Simulated by Double Linked List</h1>
+          <p class="brand__subtitle">
+            Circular double linked list + command queue + a moving “mechanic” cursor.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost"
+           href="https://archive.curs.upb.ro/2023/pluginfile.php/295771/mod_assign/intro/SDA___Teme_2023.pdf"
+           target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/train_simulator_linked_list.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project simulates a train where each wagon is a node in a circular double linked list.
+        A “mechanic” acts like a cursor placed on one wagon at a time, and the program supports moving left/right,
+        inserting wagons, deleting wagons, and writing characters into the current wagon.
+        Commands are stored in a queue and executed in the order they are read.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--mint">Double linked list</span>
+        <span class="tag tag--peach">Pointers</span>
+        <span class="tag tag--pink">Queue</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What it does</h3>
+        <ul>
+          <li>Moves the mechanic left/right across wagons (circular behavior).</li>
+          <li>Inserts wagons to the left or right of the current position.</li>
+          <li>Deletes the current wagon or clears the entire train.</li>
+          <li>Writes a character in the current wagon.</li>
+          <li>Prints the train, highlighting the mechanic's position using <code>| |</code> characters.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>The train is a circular double linked list with a sentinel (locomotive) node.</li>
+          <li>Operations update both <code>next</code> and <code>prev</code> links consistently.</li>
+          <li>Commands are first queued and later executed, so input order is preserved.</li>
+          <li>I paid attention to edge cases (first/last wagon, single wagon, empty queue).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: command execution</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This is the start of the command execution logic. The program reads the first queued command,
+        chooses the correct operation, and applies it to the current state of the train.
+      </p>
+
+      <pre><code class="language-c">void execute(FILE *file_out, coada **comenzi, TLista *tren, int *nr_val, char puse_tren[], char siruri[][100], int *cate_siruri) {
+	int i;
+	if ((*comenzi)->prim->info == '0')
+		move_left(tren);
+	else if ((*comenzi)->prim->info == '1')
+			move_right(file_out, tren);
+		else if ((*comenzi)->prim->info == '2')
+			write(tren, nr_val, puse_tren);
+			else if ((*comenzi)->prim->info == '3')
+				clear_cell(tren);
+				else if ((*comenzi)->prim->info == '4')
+					clear_all(tren);
+					else if ((*comenzi)->prim->info == '5') {
+						insert_left(file_out, tren, puse_tren[0]);
+						for (i = 0; i <= (*nr_val) - 2; i++) //fac aici instructiunile prin care elimin din vectorul de valori de pus </code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          Commands are encoded and stored in a queue. When “execute” is called, the first command is taken
+          and the corresponding operation runs on the current train state.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

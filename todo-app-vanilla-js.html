@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vanilla JS Todo App</title>
+  <meta name="description" content="Todo application built with HTML, CSS and vanilla JavaScript">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Vanilla JS Todo App</h1>
+          <p class="brand__subtitle">
+            Simple task manager built with HTML, CSS and JavaScript: state stored in memory and synced with the DOM.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn" href="archive/vanilla_js_todo_app.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This is a small Todo application built with vanilla JavaScript.
+        The app keeps its state(tasks + active filter) in memory and updates the DOM
+        using a single <code>update()</code> function that re-renders the visible list.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">JavaScript</span>
+        <span class="tag tag--mint">DOM</span>
+        <span class="tag tag--pink">Frontend</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Features</h3>
+        <ul>
+          <li>Add task on Enter</li>
+          <li>Toggle complete/ active</li>
+          <li>Delete task</li>
+          <li>Filter: All/ Active/ Completed</li>
+          <li>Clear completed</li>
+          <li>Mark all as completed</li>
+          <li>Dynamic "items left" counter</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation idea</h3>
+        <ul>
+          <li>State is stored in an array: <code>{text, completed}</code>.</li>
+          <li>Any action modifies the array.</li>
+          <li>Then a single <code>update()</code> rebuilds the visible list and counter.</li>
+          <li>No incremental DOM patching, just clean re-render logic.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: filtering + re-render</h3>
+
+<pre><code class="language-js">function update() {
+  lista.innerHTML = "";
+  const vizibile = todos.filter(t =>
+    filtru_curent === "all" ? true :
+    filtru_curent === "active" ? !t.completed :
+    t.completed
+  );
+  vizibile.forEach(t => {
+    const li = document.createElement("li");
+    lista.appendChild(li);
+  });
+  const ramase = todos.filter(t => !t.completed).length;
+  count.textContent = `${ramase} items left`;
+}
+
+todo_nou.addEventListener("keypress", (e) => {
+  if (e.key === "Enter" && todo_nou.value.trim()) {
+    todos.push({ text: todo_nou.value.trim(), completed: false });
+    todo_nou.value = "";
+    update();
+  }
+});</code></pre>
+
+      <p>
+        The idea is simple: keep the data in memory, and every change triggers a full
+        re-render. This keeps the logic predictable and easy to reason about.
+      </p>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arcade Machine</title>
+  <meta name="description" content="2D OpenGL project">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Arcade Machine: Ship Builder & Breakout</h1>
+          <p class="brand__subtitle">
+            A 2D project built in OpenGL with a ship editor and a Breakout game.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="https://ocw.cs.pub.ro/courses/egc/teme/2025/01" target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/egc_arcade_machine.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project is a small arcade made in 2D OpenGL. It has two main parts:
+        first, you build your own ship in an editor by placing blocks, and after that you use it
+        in a Breakout-style game with bricks, a ball and a platform.
+      </p>
+
+      <p class="card__desc">
+        I focused on making the editor responsive (drag & drop, hover, click actions)
+        and keeping the game logic readable: ball movement, collisions, brick removal and a simple start flow.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C++</span>
+        <span class="tag tag--mint">OpenGL</span>
+        <span class="tag tag--peach">2D Transforms</span>
+        <span class="tag tag--pink">Interaction</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Main components</h3>
+        <ul>
+          <li><strong>Ship editor</strong> - grid placement, drag & drop blocks, hover effect.</li>
+          <li><strong>Constraints check</strong> - validates the ship before starting the game.</li>
+          <li><strong>Game loop</strong> - updates ball motion and handles collisions.</li>
+          <li><strong>Bricks</strong> - initialization + rendering + removal when hit a specific number of times.</li>
+          <li><strong>UI state</strong> - switch between editor and game mode.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Key concepts used</h3>
+        <ul>
+          <li>2D transformations (translate/scale/rotate) for composing the shapes.</li>
+          <li>Mouse interaction for editor actions (hover + click + drag).</li>
+          <li>Basic collision logic (ball vs bricks/ boundaries).</li>
+          <li>Keeping data in small structures or vectors for easy iteration.</li>
+          <li>Clear separation between rendering the editor and rendering the game.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: constraints validation</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This is the part where I check the ship's configuration before allowing the player to start the game.
+        I collect the placed blocks, separate normal solids from engines and verify the constraints stated.
+      </p>
+
+<pre><code class="language-cpp">std::queue<glm::ivec2> q;
+std::vector<std::vector<int>> viz(linii, std::vector<int>(coloane, 0));
+
+q.push(blocuri[0]);
+viz[blocuri[0].x][blocuri[0].y] = 1;
+
+int cnt = 1;
+while (!q.empty()) {
+    glm::ivec2 crt = q.front();
+    q.pop();
+
+    const int dx[4] = { -1, 1, 0, 0 };
+    const int dy[4] = { 0, 0, -1, 1 };
+
+    for (int k = 0; k < 4; k++) {
+        int nx = crt.x + dx[k];
+        int ny = crt.y + dy[k];
+
+        if (nx < 0 || ny < 0 || nx >= linii || ny >= coloane)
+            continue;
+
+        if (viz[nx][ny] == 1)
+            continue;
+
+        if (matrice[Index(nx, ny)].type == TipBloc::None)
+            continue;
+
+        viz[nx][ny] = 1;
+        cnt++;
+        q.push({ nx, ny });
+    }
+}</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          I keep the ship as a grid, then validate it with a couple of simple rules.
+          After that, I run a BFS to check that the placed blocks are actually connected, not split.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

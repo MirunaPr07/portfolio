@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parallel News Aggregator</title>
+  <meta name="description" content="Multithreaded Java news aggregator">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Parallel News Aggregator</h1>
+          <p class="brand__subtitle">
+            Multithreaded JSON-processing with duplicates removal, grouping and deterministic reports.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="archive/parallel_news_aggregator_spec.pdf" download>Statement</a>
+        <a class="btn" href="archive/parallel_news_aggregator.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project is a multithreaded news aggregator written in Java. It reads multiple JSON files with articles,
+        extracts the fields needed, removes duplicates (articles with the same uuid or title) and then generates several output files:
+        articles grouped by category, grouped by language, a global list ordered by publish time and a few statistics.
+      </p>
+
+      <p class="card__desc">
+        I kept the output deterministic: sorting is done explicitly (lexicographic if necessary),
+        and the threads sync between stages so later steps run only after the data needed by all threads is ready.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">Java</span>
+        <span class="tag tag--mint">Threads</span>
+        <span class="tag tag--peach">JSON</span>
+        <span class="tag tag--pink">Synchronization</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Main components</h3>
+        <ul>
+          <li><strong>Parallel ingestion</strong> - each thread reads its allocated part of the list of JSON files.</li>
+          <li><strong>Duplicate detection</strong> - uuid/title maps for frequency, then filtering.</li>
+          <li><strong>Grouping</strong> - category -> uuids and language -> uuids.</li>
+          <li><strong>Global list</strong> - all articles ordered by the date they were published, then uuid.</li>
+          <li><strong>Reports</strong> - simple statistics (best author, top category/language, etc.).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Key concepts used</h3>
+        <ul>
+          <li>Fixed number of threads + explicit tasks splitting (by start/end indices).</li>
+          <li>Barriers for synchronization between stages.</li>
+          <li>Maps/Sets for counting and grouping.</li>
+          <li>Deterministic ordering through sorting.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: barrier sync & duplicate filter</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This part shows how I synchronize the threads between stages and then ignore articles that are duplicates
+        (uuid/title frequency different than 1) before updating the global variables.
+      </p>
+
+<pre><code class="language-java">        // neap astept ca toate thread urile sa termine de extras informatia si de actualizat variabilele!!
+        try {
+            DateGestionate.barrier.await();
+        } catch (BrokenBarrierException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        // las ca thread ul 0 sa imi actualizeze var globale de frecvente cu ce am calculat pana acum:
+        if (this.index == 0)
+            DateGestionate.combineFrequencies();
+        try {
+            DateGestionate.barrier.await();
+        } catch (BrokenBarrierException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        // astept sa se termine de actual. si frecventele, pt ca voi avea nev de ele mai departe
+        for (Article a : this.localArticles) {
+            Integer u, t;
+            u = DateGestionate.uuidFrecv.get(a.uuid);
+            t = DateGestionate.titleFrecv.get(a.title);
+            // aici ignor orice nu are frecventa de intalnire a uuid/title egala cu 1:
+            if (u != null && u == 1 && t != null && t == 1) { // completez categ, limbile si cuvintele doar daca frecv e 1!!
+                // actualizezi var globale pt categorii, limbi si cuv din DateGestionate:
+                for (String cat : a.categories)
+                    if (DateGestionate.categories.contains(cat))
+                        DateGestionate.completeaza_categoriesUuid(cat, a.uuid);
+                </code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          I split processing into stages. First, each thread reads and counts uuids/titles locally.
+          Then I sync with a barrier and merge the frequencies once, and only after that I filter the duplicates
+          and update the shared category/language variables.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Distributed Chord Lookup</title>
+  <meta name="description" content="distributed CHORD-like lookup in MPI">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Distributed Chord Lookup</h1>
+          <p class="brand__subtitle">
+            Message-based routing on a ring using finger tables.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="archive/distributed_chord_mpi_spec.pdf" download>Statement</a>
+        <a class="btn" href="archive/distributed_chord_mpi.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project simulates a small distributed lookup system inspired by CHORD.
+        Each MPI process acts as a node in a ring and gets a fixed identifier in a small key space.
+        After the initialization, nodes route lookup requests through the ring until the node responsible for the key is found.
+      </p>
+
+      <p class="card__desc">
+        To avoid forwarding only to the next neighbor every time, each node builds a finger table (pointers which describe where to jump next).
+        When a request is not in the successor interval, it chooses the next hop using the closest preceding finger,
+        which makes the routing much shorter, practically.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--mint">MPI</span>
+        <span class="tag tag--peach">Finger Table</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Main components</h3>
+        <ul>
+          <li><strong>Ring build</strong> - nodes find successor/predecessor from the global list of IDs.</li>
+          <li><strong>Finger table</strong> - calculates the next jump targets based on (id + 2^i).</li>
+          <li><strong>Distributed lookup</strong> - requests forwarded through MPI messages.</li>
+          <li><strong>Routing rule</strong> - either go to successor, or pick closest preceding finger.</li>
+          <li><strong>Termination</strong> - nodes keep serving requests until everyone is done.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Key concepts used</h3>
+        <ul>
+          <li>MPI point-to-point communication(send/recv).</li>
+          <li>Circular interval checks on a ring.</li>
+          <li>Keeping a request path (so the initiator can print the route).</li>
+          <li>Fallback logic to avoid hops that lead to no process.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: next hop selection</h3>
+
+      <p class="card__desc" style="margin-top:0">
+	This is the core of the distributed lookup. When a node receives a request, it first checks
+	if the key is in the interval between itself and its successor. If yes, it finishes the lookup; 
+	otherwise, it chooses the next hop using the finger table and forwards the request through MPI,
+	while also extending the path.
+</p>
+
+<pre><code class="language-c">if (in_interval(key, self.id, self.successor) == 1) {
+    // succesorul este responsabil
+    path[path_len++] = self.successor;
+
+    MPI_Send(&path_len, 1, MPI_INT, initiator, TAG_PATH_LEN, MPI_COMM_WORLD);
+    MPI_Send(path, path_len, MPI_INT, initiator, TAG_PATH, MPI_COMM_WORLD);
+}
+else {
+    int next = closest_preceding_finger(key);
+
+    // adaug in traseu
+    path[path_len++] = next;
+
+    MPI_Send(&key, 1, MPI_INT, next, TAG_LOOKUP, MPI_COMM_WORLD);
+    MPI_Send(&initiator, 1, MPI_INT, next, TAG_INITIATOR, MPI_COMM_WORLD);
+    MPI_Send(&path_len, 1, MPI_INT, next, TAG_PATH_LEN, MPI_COMM_WORLD);
+    MPI_Send(path, path_len, MPI_INT, next, TAG_PATH, MPI_COMM_WORLD);
+}</code></pre>
+
+    	<details style="margin-top:12px">
+			<summary>Short explanation</summary>
+			<p>
+				Each node decides locally what to do with a lookup request. Either it resolves it directly
+				(it is in the successor interval), or it forwards it to another node that is closer to the key.
+				The path is passed along so the initiator can see the full routing sequence in the end.
+			</p>
+		</details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

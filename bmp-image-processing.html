@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BMP Image Processing</title>
+  <meta name="description"
+    content="C-based BMP image processing">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">BMP Image Processing</h1>
+          <p class="brand__subtitle">
+            BMP file handling (24-bit) + transformations + convolution filters + interactive CLI.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn" href="archive/image_processing.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project is a command-driven image processor written in C for <strong>24-bit BMP</strong> files.
+        It loads an image into an <code>N x M x 3</code> RGB structure, applies operations in memory, and writes a valid
+        BMP back to disk, including correct handling of <strong>row padding</strong> and binary headers.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--mint">Binary File Format</span>
+        <span class="tag tag--peach">Pointers & Dynamic Allocation</span>
+        <span class="tag tag--pink">Image Processing</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Key features</h3>
+        <ul>
+          <li>Reading and writing 24-bit BMP files, including correct padding handling.</li>
+          <li>Image transformations such as horizontal flip and 90° left rotation.</li>
+          <li>Cropping and extending images by adding a constant color border.</li>
+          <li>Pasting one image over another with proper boundary checks.</li>
+          <li>Applying filters (blur, sharpen, edge detection or custom convolution kernels).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>Used dynamic memory allocation for image matrices and ensured no memory leaks.</li>
+          <li>Took care of boundary conditions when accessing neighboring pixels.</li>
+          <li>Structured the code into separate modules for BMP I/O and image operations.</li>
+          <li>Tested each operation individually before integrating them into the interactive program.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: apply_filter</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        The function below applies a filter matrix over the entire image.
+        For each pixel, it computes the weighted sum of its neighbors using
+        the given filter, stores the intermediate values in a separate buffer,
+        and then updates the original image while keeping values in the range [0, 255].
+      </p>
+
+      <pre><code class="language-c">int ***apply_filter(int ***image, int N, int M, float **filter, int filter_size) {
+        float ***cimg = NULL;
+        int p = 0, q = 0, i = 0, j = 0, k = 0, min1 = 0, min2 = 0, max1 = 0, max2 = 0, x = filter_size/2, y = filter_size/2;
+        cimg = calloc(N, sizeof(float**));
+        for (i = 0; i &lt;= N-1; i++)
+            cimg[i] = calloc(M, sizeof(float*));
+        for (i = 0; i &lt;= N-1; i++)
+            for (j = 0; j &lt;= M-1; j++)
+                cimg[i][j] = calloc(3, sizeof(float));
+        for (i = 0; i &lt;= N-1; i++)
+            for (j = 0; j &lt;= M-1; j++) {
+                if (i &lt;= x)
+                    min1 = 0;
+                else
+                    min1 = i-x;
+                if (j &lt;= y)
+                    min2 = 0;
+                else
+                    min2 = j-y;
+                if (N-i-1 &lt;= x)
+                    max1 = N-1;
+                else
+                    max1 = i+x;
+                if (M-j-1 &lt;= y)
+                    max2 = M-1;
+                else
+                    max2 = j+y;
+                for (p = min1; p &lt;=max1; p++)
+                    for (q = min2; q &lt;= max2; q++) {
+                        for (k = 0; k &lt;= 2; k++)
+                            cimg[i][j][k]+=(float)image[p][q][k]*filter[p+x-i][q+y-j];
+                    }
+            }
+        for (i = 0; i &lt;= N-1; i++)
+            for (j = 0; j &lt;= M-1; j++)
+                for (k = 0; k &lt;= 2; k++) {
+                    image[i][j][k] = (int)cimg[i][j][k];
+                    if (image[i][j][k] &lt; 0)
+                        image[i][j][k] = 0;
+                    if (image[i][j][k] &gt; MAXIM)
+                        image[i][j][k] = MAXIM;
+                }
+        for (i = 0; i &lt;= N-1; i++)
+            for (j = 0; j &lt;= M-1; j++)
+                free(cimg[i][j]);
+        for (i = 0; i &lt;= N-1; i++)
+            free(cimg[i]);
+        free(cimg);
+        return image;
+    }</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          I used an auxiliary 3D buffer to store intermediate float values while computing
+          the filtered pixels. After that, values are cast to int and clamped
+          between 0 and 255. All allocated memory for the temporary buffer is freed
+          before returning the modified image.
+        </p>
+      </details>
+    </section>
+
+    <section class="card section">
+      <h3>Interactive CLI</h3>
+      <p class="card__desc" style="margin-top:0">
+        The interactive version supports working with multiple images and filters
+        at the same time. Each one has an index, and operations modify the
+        selected image directly. When something is deleted, its memory is freed
+        and the indices are adjusted.
+      </p>
+
+      <pre><code>l N M path                 # load BMP as NxMx3
+s index path               # save image at index
+ah index                   # apply horizontal flip
+ar index                   # apply rotate-left
+ac index x y w h            # crop
+ae index rows cols R G B    # extend with constant border color
+ap index_dst index_src x y  # paste with clipping
+
+cf size v1 v2 ... v(size*size)  # create filter
+af index_img index_filter        # apply filter
+df index_filter                  # delete filter
+di index_img                     # delete image
+e                                # exit
+    </code></pre>
+    </section>
+
+    <section class="card section">
+      <h3>How to run</h3>
+      <pre><code>make
+./interactive &lt; input.txt
+
+# optional (the valgrind command)
+valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./interactive &lt; input.txt</code></pre>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

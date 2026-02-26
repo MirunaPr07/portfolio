@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Systems & Low-Level</title>
+  <meta name="description" content="Systems and low-level programming projects">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Systems & Low-Level</h1>
+          <p class="brand__subtitle">
+            C projects focused on memory, binary formats, data structures and assembly.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back</a>
+      </nav>
+    </header>
+
+    <section id="projects" class="grid" style="margin-top:18px">
+
+      <!-- Project 1: BMP -->
+      <article class="card">
+
+        <h3 style="margin:12px 0 6px">BMP Image Processing</h3>
+        <div class="card__meta">Systems Programming • Binary I/O • Image Processing</div>
+
+        <p class="card__desc">
+          An image processing tool written in C that works directly on RGB matrices
+  		loaded from 24-bit BMP files. It applies geometric transformations (rotate, crop, extend, paste) and custom filters,
+  		while handling binary file structure and dynamic memory allocation explicitly.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C</span>
+          <span class="tag">Binary I/O</span>
+          <span class="tag">Memory Safety</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="bmp-image-processing.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/image_processing.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Unix Timestamps & Timezone Planner</h3>
+        <div class="card__meta">Bitwise Operations • Timezones</div>
+
+        <p class="card__desc">
+          A C project that covers time conversion (Unix timestamp <-> date/time),
+          timezone offsets, compact date packing using bit operations, and a simple planner
+          that finds a common meeting interval across multiple people.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C</span>
+          <span class="tag">Bitwise</span>
+          <span class="tag">Time/Date</span>
+          <span class="tag">Timezones</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="unix-timestamps-timezone-planner.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/unix_timestamps.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Functional Utils</h3>
+        <div class="card__meta">C • Function Pointers • Generic Data</div>
+
+        <p class="card__desc">
+          A small C library that brings functional operations to generic arrays:
+          for_each, map, filter, reduce, plus the versions that iterate through multiple lists in parallel.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C</span>
+          <span class="tag">Pointers</span>
+          <span class="tag">Varargs</span>
+          <span class="tag">Memory</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="functional-utils.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/functionals.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">x86 Assembly Practice</h3>
+        <div class="card__meta">x86 ASM • Bitwise • C and Assembly integration</div>
+
+        <p class="card__desc">
+          Small x86 Assembly tasks: bitmask permission checks, a Treyfer-like block cipher,
+          and a step-by-step labyrinth solver. Focused on registers usage, stack usage and calling conventions.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">ASM</span>
+          <span class="tag">Bitwise</span>
+          <span class="tag">Registers</span>
+          <span class="tag">Stack</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="x86-asm-basics.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/x86_asm_practice.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Recursive Algorithms in Assembly</h3>
+        <div class="card__meta">x86 ASM • Recursion • QuickSort & Binary Search</div>
+
+        <p class="card__desc">
+          Implemented classic algorithms directly in assembly: parentheses validation,
+          recursive QuickSort and Binary Search, plus a small 64-bit bonus with map/reduce.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">ASM</span>
+          <span class="tag">Recursion</span>
+          <span class="tag">Algorithms</span>
+          <span class="tag">x86/x64</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="asm-recursive-algorithms.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/asm_recursive_algorithms.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

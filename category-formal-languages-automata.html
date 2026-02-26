@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formal Languages & Automata</title>
+  <meta name="description" content="Formal languages and automata projects">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Formal Languages & Automata</h1>
+          <p class="brand__subtitle">
+            Automata constructions, regex processing and formal computation models.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back</a>
+      </nav>
+    </header>
+
+    <section id="projects" class="grid" style="margin-top:18px">
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Turing Machine: Skyscrapers Validator</h3>
+        <div class="card__meta">Turing Machine • Automata • Formal Languages</div>
+
+        <p class="card__desc">
+          A Turing Machine that validates a 4x4 Skyscrapers format.
+          Separate machines check row and column uniqueness,
+          visibility constraints and a final validation.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">Turing Machine</span>
+          <span class="tag">Automata</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="turing-machine-skyscrapers.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/turing_machine_skyscrapers.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Regex to Automata Engine</h3>
+        <div class="card__meta">Regular Expressions • NFA/DFA • Thompson & Subset Construction</div>
+
+        <p class="card__desc">
+          A Python project that turns regular expressions into automata.
+          I built an NFA using Thompson construction and then converted it into a DFA using subset construction,
+          with epsilon-closures and explicit transition tables.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">Python</span>
+          <span class="tag">Regex</span>
+          <span class="tag">NFA</span>
+          <span class="tag">DFA</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="regex-automata-engine.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/regex_automata_engine.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

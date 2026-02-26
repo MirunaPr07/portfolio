@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unix Timestamps & Timezone Planner</title>
+  <meta name="description" content="C project: Unix timestamps, timezones, bit packing, and a multi-person planner.">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Unix Timestamps & Timezone Planner</h1>
+          <p class="brand__subtitle">
+            Unix timestamp conversions + timezone offsets + bit packing + a simple event planner.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn" href="archive/unix_timestamps.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project is split into three parts. First, I implemented time conversions without using built-in
+        date/time parsing helpers (timestamp to date/time and back). Then I worked on packing dates into bits
+        to save space, including a version where multiple dates are packed across integers with control bits.
+        Finally, I used the time conversion functions to build a small planner that finds a common time interval
+        for an event across multiple people in different timezones.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--mint">Timezones</span>
+        <span class="tag tag--peach">Bitwise Operations</span>
+        <span class="tag tag--pink">Parsing Logic</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What it does</h3>
+        <ul>
+          <li>Converts Unix timestamps to time (hour/min/sec) and date (day/month/year).</li>
+          <li>Handles leap years and timezone offsets (UTC +/- hours).</li>
+          <li>Packs dates into bit fields and sorts them in chronological order.</li>
+          <li>Packs multiple dates across integers and ignores corrupted chunks using control bits.</li>
+          <li>Finds the earliest interval where at least F people are available for a full event duration.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>I kept the logic split across separate files: time conversions, bit packing, and the planner.</li>
+          <li>For time conversion I handled details such as leap years and month lengths manually.</li>
+          <li>For packing I used masks and shifts to extract fields (day/month/year) and to rebuild them.</li>
+          <li>For the planner I converted everything to a common reference (UTC) before comparing intervals.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: bit extraction (packed dates)</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        In the packing part, a date is stored inside an unsigned int using bit fields.
+        This function extracts day/month/year and then sorts the results chronologically.
+      </p>
+
+      <pre><code class="language-c">void exercitiu7(int n, unsigned int vect[]) {
+    TDate v[2*2*2*(4+1)*(4+1)*(4+1)];
+    int ok = 0;
+    unsigned int x = 0, masca1 = trei_unu, masca2 = unu_cinci, masca3 = sase_trei;
+    for (int i = 0; i &lt;= n-1; i++) {
+        x = vect[i];
+        v[i].day = x&amp;masca1;
+        v[i].month = (x &gt;&gt; cinci)&amp;masca2;
+        v[i].year = an_plecare + ((x &gt;&gt; noua)&amp;masca3);
+    }
+    do {
+        ok = 1;
+        for (int i = 0; i &lt;= n-2; i++) {
+            if ((v[i].year &gt; v[i+1].year) || (v[i].year == v[i+1].year &amp;&amp; v[i].month &gt; v[i+1].month) ||
+            (v[i].year == v[i+1].year &amp;&amp; v[i].month == v[i+1].month &amp;&amp; v[i].day &gt; v[i+1].day)) {
+                TDate aux = v[i];
+                v[i] = v[i+1];
+                v[i+1] = aux;
+                ok = 0;
+            }
+        }
+    } while (ok == 0);
+    for (int i = 0; i &lt;= n-1; i++) {
+        printf("%d ", v[i].day);
+        printmonth(v[i].month);
+        printf(" %d\n", v[i].year);
+    }
+}</code></pre>
+    </section>
+
+    <section class="card section">
+      <h3>How to run</h3>
+      <pre><code>make
+./timelib
+./bitpacking
+./planner
+
+# optional (valgrind)
+valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./planner</code></pre>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

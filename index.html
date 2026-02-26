@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Miruna Prunoiu • Portfolio</title>
+  <meta name="description"
+    content="Software engineering portfolio">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Prunoiu Miruna-Alessandra</h1>
+          <p class="brand__subtitle">
+            Computer Science student • Software Engineering • Algorithmic Problem Solving
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn" href="https://github.com/MirunaPr07" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>About</h3>
+    	<p class="card__desc" style="margin-top:0">
+        Welcome to my portfolio!
+        First of all, a few words about me: I am a Computer Science student who genuinely enjoys learning,
+        taking challenges and pushing my logic as far as possible. I like problems that make me think,
+        especially the ones that don't have an obvious solution from the start.
+      </p>
+
+      <p class="card__desc">
+        Technically speaking, I enjoy writing algorithms most of all; what I love is analizing the project, coming up with the idea and only after that, writing the code.
+        I like searching for patterns, analizing the limit cases and only then translating my solution into something structured and clean.
+        I am particularly drawn to low-level programming and data structures, but I also enjoy working with Java and web technologies.
+        I appreciate projects that "play with my brain" and force me to approach things from different angles.
+      </p>
+
+      <p class="card__desc">
+        I built this website to bring together the projects I cared about the most during university, the ones I worked on with real curiosity and involvement.
+        I organized them by category so it's easier to navigate through the different areas I explored.
+      </p>
+
+      <p class="card__desc">
+        More than anything, this portfolio reflects how I learn: once I understand the problem, I adapt quickly and improve through practice.
+        I believe the variety of projects here shows my versatility and how comfortably I can move between different types of systems,
+        from algorithms and low-level logic to distributed systems, graphics or application development.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--lila">C++</span>
+        <span class="tag tag--mint">Java</span>
+		<span class="tag tag--peach">Python</span>
+        <span class="tag tag--peach">Algorithms</span>
+        <span class="tag tag--pink">Web</span>
+      </div>
+    </section>
+
+    <section class="grid" style="margin-top:18px">
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Systems & Low-Level</h3>
+        <div class="card__meta">C • Memory • Binary I/O • Assembly</div>
+        <p class="card__desc">
+          C projects focused on low-level handling: files, pointers and assembly.
+        </p>
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="category-systems-low-level.html">Open</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Algorithms & Data Structures</h3>
+        <div class="card__meta">Graphs • DP • Trees • BFS/Dijkstra</div>
+        <p class="card__desc">
+          Algorithmic problems and core data structures (graphs, trees, DP, search).
+        </p>
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="category-algorithms-data-structures.html">Open</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Graphics & Interactive</h3>
+        <div class="card__meta">OpenGL • 2D/3D • Collisions</div>
+        <p class="card__desc">
+          Interactive OpenGL projects (2D editor/game and 3D scene with gameplay logic).
+        </p>
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="category-graphics-interactive.html">Open</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Formal Languages & Automata</h3>
+        <div class="card__meta">Regex • NFA/DFA • Turing Machine</div>
+        <p class="card__desc">
+          Projects related to automata constructions and formal models of computation.
+        </p>
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="category-formal-languages-automata.html">Open</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Distributed & Parallel</h3>
+        <div class="card__meta">Threads • MPI • Synchronization</div>
+        <p class="card__desc">
+          Parallel processing and distributed routing through message passing.
+        </p>
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="category-distributed-parallel.html">Open</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Applications & Web</h3>
+        <div class="card__meta">Java OOP • Frontend • Small Apps</div>
+        <p class="card__desc">
+          Structured Java applications and a simple web project built with vanilla JS.
+        </p>
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="category-applications-web.html">Open</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

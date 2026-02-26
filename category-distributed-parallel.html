@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Distributed & Parallel</title>
+  <meta name="description" content="Distributed systems and parallel projects">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Distributed & Parallel</h1>
+          <p class="brand__subtitle">
+            Parallel processing, synchronization and message passing based routing.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back</a>
+      </nav>
+    </header>
+
+    <section id="projects" class="grid" style="margin-top:18px">
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Parallel News Aggregator</h3>
+        <div class="card__meta">Multithreading • JSONs • Deterministic Output</div>
+
+        <p class="card__desc">
+          A multithreaded Java program that processes a large number of news articles from JSON files in an efficient way.
+          Firstly, it removes duplicates(by uuid/title) and then: groups articles by category and language,
+          generates a global chronological list and outputs keyword infomation for english articles.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">Java</span>
+          <span class="tag">Threads</span>
+          <span class="tag">JSON</span>
+          <span class="tag">Synchronization</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="parallel-news-aggregator.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/parallel_news_aggregator.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Distributed Chord Lookup</h3>
+        <div class="card__meta">MPI • Distributed Routing • Finger Table Algorithm</div>
+
+        <p class="card__desc">
+          A small distributed lookup program inspired by CHORD. Each MPI process represents a node in the ring,
+          builds its finger table locally and routes lookup requests through message passing until the needed node is found.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">C</span>
+          <span class="tag">MPI</span>
+          <span class="tag">Distributed</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="distributed-chord-mpi.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/distributed_chord_mpi.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

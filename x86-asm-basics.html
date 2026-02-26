@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>x86 Assembly Practice</title>
+  <meta name="description" content="x86 assembly tasks">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">x86 Assembly Practice</h1>
+          <p class="brand__subtitle">
+            Bitwise checks, a small block cipher, and a labyrinth solver in x86 ASM.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="https://gitlab.cs.pub.ro/iocla/tema2-2024" target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/x86_asm_practice.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        In this project, I worked in x86 assembly on a few separate tasks that helped me get comfortable with
+        registers, stack usage, memory addressing and calling functions from C. The tasks include a bitmask-based
+        permission check, a Treyfer-style block cipher (S-Box + rotations), and a labyrinth solver that moves
+        step by step through a grid until it reaches an exit.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">ASM (x86)</span>
+        <span class="tag tag--mint">Bitwise operations</span>
+        <span class="tag tag--peach">Stack</span>
+        <span class="tag tag--pink">C/ASM integration</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What I implemented</h3>
+        <ul>
+          <li>Permission check using masks and bitwise operations (and/shift).</li>
+          <li>Working with structures and values passed from C to ASM.</li>
+          <li>Treyfer-style cipher logic (byte operations, S-Box lookup, rotate).</li>
+          <li>Labyrinth navigation using simple movement rules on a matrix.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>I used registers for intermediate values and indexes (EAX/EBX/ECX/EDX).</li>
+          <li>Parameters are read from the stack and results are written back through pointers.</li>
+          <li>Most of the work is careful addressing: getting the right byte from the right place.</li>
+          <li>It was a good exercise for thinking about data layout and control flow without C shortcuts.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: labyrinth movement loop</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This is the part where the solver marks the current cell and then decides where to move next
+        (up/down/left/right) until it reaches the last row or last column.
+      </p>
+
+      <pre><code class="language-nasm">repetitiva:
+		; pun linia in edi
+		mov     edi, [esi + 4 * eax] ; val din edi e de tip char *
+		; fiecare linie e de tip char *(pointer ul are dim de 4 octeti)
+		mov     byte [edi + ebx], 49 ; pun 1 la pozitia la care sunt
+		; (codul ascii al lui 1 e 49)
+		cmp     eax, 0 ; daca sunt pe prima linie nu exista sus
+		je stanga ; atunci sar direct la urm verificare
+		; ajung aici doar daca exista sus
+		mov     edi, [esi + 4 * (eax - 1)] ; retin linia anterioara
+		cmp     byte [edi + ebx], 48 ; daca am 0 in sus
+		jne stanga
+		dec     eax ; ma mut sus daca e liber
+		jmp final ; daca am mers in sus sar peste celelalte verificari
+
+		stanga:
+			cmp     ebx, 0 ; daca nr coloanei e 0
+			je dreapta
+			; exista stanga
+			mov     edi, [esi + 4 * eax] ; pun iar in edi linia curenta
+			; (sa fiu sigura ca nu s a modif)
+			cmp     byte [edi + ebx - 1], 48 ; daca am 0 la stanga
+			jne dreapta
+			dec     ebx ; ma mut in stanga
+			jmp final ; sar peste ceilalti pasi
+
+		dreapta:
+			mov     edi, [esi + 4 * eax] ; retin linia curenta
+			cmp     byte [edi + ebx + 1], 48 ; daca in draepta am 0(liber)
+			jne jos
+			inc     ebx ; ma mut in dreapta
+			jmp final
+
+		jos:
+			inc     eax ; aici nu mai am nicio verificare
+			; dc am ajuns aici inseamna ca sigur tb sa ma mut in jos
+
+		final:
+			cmp     eax, ecx
+			je end
+			cmp     ebx, edx ; daca am ajuns cu valoarea din eax la m - 1
+			; sau cu cea din ebx la n - 1
+			je end
+			jmp repetitiva ; ajung aici doar daca nu am ajuns cu eax sau ebx la sfarsit</code></pre>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

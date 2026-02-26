@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Applications & Web</title>
+  <meta name="description" content="Java applications and web projects">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Applications & Web</h1>
+          <p class="brand__subtitle">
+            Structured Java applications and a small frontend project in vanilla JS.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back</a>
+      </nav>
+    </header>
+
+    <section id="projects" class="grid" style="margin-top:18px">
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Java Voting System</h3>
+        <div class="card__meta">OOP • Collections</div>
+
+        <p class="card__desc">
+          Object-oriented Java application that models the process of an election:
+          voter registration, vote processing, fraud detection
+          and detailed reports per region or candidate.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">Java</span>
+          <span class="tag">Collections</span>
+          <span class="tag">OOP</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="java-voting-system.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/java_voting_system.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">Java Airport Scheduler</h3>
+        <div class="card__meta">OOP • Generics • Queues</div>
+
+        <p class="card__desc">
+          Airport runway management system with separate queues(for urgent or normal flights) and rules
+          based on the last maneuver. It includes validations, custom exceptions, and commands for detailed runway/flight info.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">Java</span>
+          <span class="tag">OOP</span>
+          <span class="tag">Generics</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="java-airport-scheduler.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/java_airport_scheduler.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 style="margin:12px 0 6px">JS Todo App</h3>
+        <div class="card__meta">HTML • CSS • JavaScript</div>
+
+        <p class="card__desc">
+          A small but clean Todo application built with vanilla JavaScript.
+          In-memory state + full re-render strategy, filtering, counters and tasks management.
+        </p>
+
+        <div class="tags" style="margin:10px 0 14px">
+          <span class="tag">JavaScript</span>
+          <span class="tag">DOM</span>
+          <span class="tag">Frontend</span>
+        </div>
+
+        <div class="toolbar" style="margin-left:0">
+          <a class="btn" href="todo-app-vanilla-js.html">To Page</a>
+          <a class="btn btn--ghost" href="archive/vanilla_js_todo_app.zip" download>Download .zip</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

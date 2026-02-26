@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pairing Heap & Streaming Median</title>
+  <meta name="description" content="Racket project with pairing heaps">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Pairing Heap & Streaming Median</h1>
+          <p class="brand__subtitle">
+            Pairing heaps in Racket generalized by comparators, used for extracting top-k and a dynamic median over streams.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn" href="archive/racket_pairing_heap_stream_median.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project is a set of Racket implementations centered around pairing heaps(PH).
+        I built the basic operations and then used the same structure in a few different directions:
+        comparator-based heaps, top-k extraction and a streaming median.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">Racket</span>
+        <span class="tag tag--mint">Pairing Heap</span>
+        <span class="tag tag--peach">Comparators</span>
+        <span class="tag tag--pink">Streams</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What I implemented</h3>
+        <ul>
+          <li><strong>Pairing heap functions</strong>: insertion, merge, deleting the root using a two-pass merge idea.</li>
+          <li><strong>Generalized merge</strong>: the same heap works for different orderings by changing the comparator.</li>
+          <li><strong>Top-k extraction</strong>: repeatedly extract the best element to build a top list.</li>
+          <li><strong>Streaming median</strong>: keep two heaps (lower half/ upper half) and calculate the median after each update.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Why this project is important</h3>
+        <ul>
+          <li>It forced me to write clean functional code, not just get any solution.</li>
+          <li>The median part is in “real time": we get values continuously and the result updates instantly.</li>
+          <li>Using two heaps is a simple idea, but you really understand the purpose once it's done over streams.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: median decision(two heaps)</h3>
+      <p class="card__desc" style="margin-top:0">
+        This snippet is the exact point where I decide how to output the median for a film,
+        based on the size difference between the two heaps.
+      </p>
+
+<pre><code class="language-racket">(define (construieste_pereche cvartet)
+  ; am cvartetul curent si vreau sa imi returnez perechea formata din ce imi trebuie mie
+  (define nume (car cvartet))
+  (define delta (car (cdr cvartet)))
+  (define max-ph (car (cdr (cdr cvartet))))
+  (define min-ph (car (cdr (cdr (cdr cvartet)))))
+  (if (= delta 1) (cons nume (ph-root max-ph)) (cons nume (/ (+ (ph-root min-ph) (ph-root max-ph)) 2)))
+)</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          I keep the ratings split into the two pairing heaps. If one side has exactly one extra element, the median is the
+          root of that heap, otherwise I take the average of the two roots.
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

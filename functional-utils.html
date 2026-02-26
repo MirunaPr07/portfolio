@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Functional Utils</title>
+  <meta name="description" content="C functional utils">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Functional Utils</h1>
+          <p class="brand__subtitle">
+            for_each, map, filter, reduce + multi-list versions, using generic pointers and varargs
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="https://gitlab.cs.pub.ro/iocla/tema-1-2024" target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/functionals.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        In this project, I built a small library for processing generic arrays in a functional style.
+        The main idea is an <code>array_t</code> that stores a <code>void*</code> buffer, element size, length,
+        and an optional destructor. On top of that, I implemented <strong>for_each</strong>, <strong>map</strong>,
+        <strong>filter</strong> and <strong>reduce</strong> functions, and also versions of these that can iterate through multiple lists
+        in parallel.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--mint">Function pointers</span>
+        <span class="tag tag--peach">void*</span>
+        <span class="tag tag--pink">Varargs</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>What it includes</h3>
+        <ul>
+          <li>Generic array container with optional element destructor.</li>
+          <li>for_each for applying an action over all elements.</li>
+          <li>map for building a new list by transforming elements.</li>
+          <li>filter for selecting elements based on a predicate.</li>
+          <li>reduce for aggregating values into an accumulator.</li>
+          <li>Multiple-list versions that process lists side by side.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation notes</h3>
+        <ul>
+          <li>I used <code>void*</code> and element sizes to keep the library generic.</li>
+          <li>Callbacks are passed as function pointers for transform/filter/reduce logic.</li>
+          <li>For the multi-list versions I used varargs and iterated until the shortest list ends.</li>
+          <li>Memory is handled through destructors when the list has heap-allocated elements.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: reduce_multiple</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This function reduces multiple lists in parallel. At each step, it takes the current element from each list,
+        builds a small array of pointers to those elements, and passes it to the reducer callback together with the accumulator.
+      </p>
+
+      <pre><code class="language-c">void *reduce_multiple(void(*func)(void *, void **), void *acc, int varg_c, ...)
+{
+	int minim;
+	minim = MIA;
+	va_list args;
+	va_start(args, varg_c);
+	array_t lista;
+	for (int i = 0; i <= varg_c - 1; i++) {
+		lista = va_arg(args, array_t);
+		if (lista.len < minim)
+			minim = lista.len;
+	}
+	va_end(args);
+	char **p;
+	p = malloc(varg_c * sizeof(char *));
+	if (!p)
+		return NULL;
+	for (int i = 0; i <= minim - 1; i++) {
+		va_start(args, varg_c);
+		for (int j = 0; j <= varg_c - 1; j++) {
+			lista = va_arg(args, array_t);
+			*(p + j) = (char *)lista.data + i * lista.elem_size;
+		}
+		(*func)(acc, (void **)p);
+		va_end(args);
+	}
+	free(p);
+	return acc;
+}</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          The main part here is the combination of varargs + generic pointers.
+          I first compute the minimum length, then for each index I collect pointers to the current elements
+          and call the reducer function on the accumulator.
+        </p>
+      </details>
+    </section>
+
+    <section class="card section">
+      <h3>How to run</h3>
+      <pre><code>make build
+../functional</code></pre>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graphs: Shortest Paths</title>
+  <meta name="description" content="C graphs project: shortest paths using Dijkstra">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Graphs: Shortest Paths with Route Wear</h1>
+          <p class="brand__subtitle">
+            Two modes: route wear simulation and shortest paths using Dijkstra.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="archive/enunt_tema3_sda.zip" download>Statement</a>
+        <a class="btn" href="archive/graph_wear_dijkstra.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project contains two separate graph tasks inside the same program, selected by a command-line argument
+        (<code>1</code> or <code>2</code>). I used adjacency lists to represent an undirected graph and kept the logic
+        split by mode: one part simulates how wear spreads across route segments over the years, and the other
+        finds the shortest paths from a start city using Dijkstra and outputs the requested edges.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C</span>
+        <span class="tag tag--mint">Graphs</span>
+        <span class="tag tag--pink">Dijkstra</span>
+        <span class="tag tag--peach">Adjacency Lists</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Mode 1: Route wear simulation</h3>
+        <ul>
+          <li>Reads routes and segment wear values (<code>floats</code> with two decimals).</li>
+          <li>Simulates wear changes for <code>K</code> years using the rules from the statement.</li>
+          <li>Updates are applied step by step (not reusing newly updated values inside the same year).</li>
+          <li>At the end, it computes average wear per route and prints only routes under a threshold.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Mode 2: Shortest paths</h3>
+        <ul>
+          <li>Runs Dijkstra from the start node using arrays for distances and visited.</li>
+          <li>Keeps predecessor info to reconstruct which edges are part of the shortest paths.</li>
+          <li>Outputs the chosen edges in the input order, following the constraints.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: wear update step</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        This is a piece of the wear simulation update: affected segments grow, and segments with zero wear
+        are updated based on neighbors. The loop runs year by year.
+      </p>
+
+      <pre><code class="language-c">void modif_degradari(TLista graf[100], int nr_orase, int nr_ani) {
+	int i, j, k;
+	TLista p, q;
+	for (i = 1; i <= nr_ani; i++) {
+		for (j = 0; j <= nr_orase - 1; j++) {
+			p = graf[j];
+			while (p != NULL) {
+				if (p->sursa == 0) {
+					for (k = 0; k <= p->nr_tronsoane - 1; k++) {
+						if (p->degradari[k] != 0) {
+							if (p->degradari[k] * 2 > 100)
+								p->degradari[k] = 100;
+							else
+								p->degradari[k] *= 2;
+						}</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          The simulation runs in discrete years. For each route segment, the code updates the wear value based on the
+          rules stated (growth for already affected segments, propagation for zero-wear segments), limited to 100.
+        </p>
+      </details>
+    </section>
+
+    <section class="card section">
+      <h3>How to run</h3>
+      <pre><code>./tema3 1
+./tema3 2
+
+# input: tema3.in
+# output: tema3.out</code></pre>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>

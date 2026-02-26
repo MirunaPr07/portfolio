@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Train Geeks</title>
+  <meta name="description" content="3D OpenGL train project">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="site">
+      <div class="brand">
+        <div class="brand__avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="brand__title">Train Geeks & Cargo Delivery</h1>
+          <p class="brand__subtitle">
+            A 3D OpenGL scene with an autonomous train, stations and a simple delivery loop.
+          </p>
+        </div>
+      </div>
+
+      <nav class="toolbar">
+        <a class="btn btn--ghost" href="index.html">Back to projects</a>
+        <a class="btn btn--ghost" href="https://ocw.cs.pub.ro/courses/egc/teme/2025/02" target="_blank" rel="noopener">Statement</a>
+        <a class="btn" href="archive/egc_train_geeks.zip" download>Download .zip</a>
+      </nav>
+    </header>
+
+    <section class="card section">
+      <h3>Overview</h3>
+      <p class="card__desc" style="margin-top:0">
+        This project is a 3D scene made in OpenGL. I built a grid-like map (terrain tiles),
+        placed 4 stations (one main + three secondary), and created a rail track with multiple segments and intersections.
+        The train moves automatically on the rails using linear interpolation between segment endpoints.
+      </p>
+
+      <p class="card__desc">
+        On top of the movement, I added a simple delivery loop: secondary stations can give resources with a cooldown,
+        the main station is used for completing an order and there is also a timer so the minigame has to be finished in time.
+        Collisions are handled using basic AABB boxes.
+      </p>
+
+      <div class="tags" style="margin-top:10px">
+        <span class="tag tag--lila">C++</span>
+        <span class="tag tag--mint">OpenGL</span>
+        <span class="tag tag--peach">3D</span>
+        <span class="tag tag--pink">Collisions</span>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <div class="card">
+        <h3>Main components</h3>
+        <ul>
+          <li><strong>Terrain grid</strong> - different tile types (field/water/mountain) represented by different colors.</li>
+          <li><strong>Stations</strong> - one main station and three secondary ones, each with a different mesh.</li>
+          <li><strong>Rail network</strong> - multiple segments, including intersections (viewed as children links).</li>
+          <li><strong>Autonomous train</strong> - progress on a segment + switching to next segment.</li>
+          <li><strong>Delivery logic</strong> - resources + cooldown + order list + timer.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Key concepts used</h3>
+        <ul>
+          <li>3D transforms and building objects from simple meshes.</li>
+          <li>Camera setup + perspective projection.</li>
+          <li>Movement on a path using linear interpolation.</li>
+          <li>Basic 3D collision detection using AABBs.</li>
+          <li>Simple game state: timer + cooldowns + win/lose state.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h3>Representative code: 3D AABB collision check</h3>
+
+      <p class="card__desc" style="margin-top:0">
+        I approximate the train and stations with axis-aligned boxes, then I test overlap on X/Y/Z.
+        I used this for detecting when the train enters a station area.
+      </p>
+
+<pre><code class="language-cpp">Tema2::AABB Tema2::AABBTrain() {
+    AABB b;
+    glm::vec3 c = train.pozitie + glm::vec3(0.0f, 1.0f, 0.0f); // ridic centrul pe y putin ca sa prinda locomotiva
+    b.minv = c - halfTrainAABB;
+    b.maxv = c + halfTrainAABB;
+    return b;
+}
+
+bool Tema2::IntersectAABB(AABB& a, AABB& b) {
+    // mai bine iau manual cazurile in care nu se inters.
+    if (a.maxv.x < b.minv.x || a.minv.x > b.maxv.x)
+        return false;
+    if (a.maxv.y < b.minv.y || a.minv.y > b.maxv.y)
+        return false;
+    if (a.maxv.z < b.minv.z || a.minv.z > b.maxv.z)
+        return false;
+    return true;
+}</code></pre>
+
+      <details style="margin-top:12px">
+        <summary>Short explanation</summary>
+        <p>
+          The idea is just to eliminate the “no intersection” cases on each axis.
+          If the boxes overlap on X, Y and Z, then I consider and treat it as a collision(for stations).
+        </p>
+      </details>
+    </section>
+
+    <footer class="site">© <span id="y"></span> Miruna</footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>
